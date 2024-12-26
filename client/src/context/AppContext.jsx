@@ -20,7 +20,7 @@ const AppContextProvider = (props) => {
 
   const loadCreditsData = async () => {
     try {
-      const { data } = await axios.get(backendUrl + "/api/user/credits", {
+      const { data } = await axios.get(backendUrl + '/api/user/credits', {
         headers: { token },
       });
 
@@ -34,40 +34,41 @@ const AppContextProvider = (props) => {
     }
   };
 
-  const generateImage = async (prompt) =>{
+  const generateImage = async (prompt) => {
     try {
-      const {data} = await axios.post(backendUrl + '/api/image/generate-image', {prompt},{headers: {token}})
+      const { data } = await axios.post(
+        backendUrl + "/api/image/generate-image",
+        { prompt },
+        { headers: { token } }
+      );
 
-      if(data.success){
-        loadCreditsData()
-        return data.resultImage
-      }
-      else {
+      if (data.success) {
+        loadCreditsData();
+        return data.resultImage;
+      } else {
         toast.error(data.message);
         loadCreditsData();
-        if(data.creditBalance === 0){
-          navigate('/buy');
+        if (data.creditBalance === 0) {
+          navigate("/buy");
         }
       }
-      
     } catch (error) {
       toast.error(error.message);
-      
     }
+  };
 
-  }
-
-  const logout = ()=>{
-    localStorage.removeItem('token')
-    setToken('')
+  const logout = () => {
+    localStorage.removeItem("token");
+    setToken("");
     setUser(null);
-  }
-  useEffect(() => {
-    if(token){
-      loadCreditsData()
-    }
+  };
 
-  }, [token])
+  useEffect(() => {
+    if (token) {
+      loadCreditsData();
+    }
+  }, [ token]);
+
   const value = {
     user,
     setUser,
@@ -80,7 +81,7 @@ const AppContextProvider = (props) => {
     setCredit,
     loadCreditsData,
     logout,
-    generateImage
+    generateImage,
   };
 
   return (
