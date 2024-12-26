@@ -59,7 +59,6 @@ const loginUser = async (req, res) => {
 const userCredits = async (req, res) => {
   try {
     const { userId } = req.body;
-
     const user = await userModel.findById(userId);
     res.json({
       success: true,
@@ -82,7 +81,9 @@ const razorpayInstance = new razorpay({
 const paymentRazorpay = async (req, res) => {
   try {
     const { userId, planId } = req.body;
+
     const userData = await userModel.findById(userId);
+
     if (!userId || !planId) {
       return res.json({ success: false, message: "Missing Details" });
     }
@@ -155,6 +156,7 @@ const verifyRazorPay = async (req, res) => {
 
       const userData = await userModel.findById(transactionData.userId);
       const creditBalance = userData.creditBalance + transactionData.credits;
+
       await userModel.findByIdAndUpdate(userData._id, { creditBalance });
       await transactionModel.findByIdAndUpdate(transactionData._id, {payment: true})
 
@@ -170,4 +172,4 @@ const verifyRazorPay = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser, userCredits, paymentRazorpay };
+export { registerUser, loginUser, userCredits, paymentRazorpay, verifyRazorPay};
